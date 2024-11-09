@@ -72,13 +72,13 @@ def index():
             <main>
                 <h1>Welcome to Simguistic</h1>
                 <h2>This site is under development :)</h2>
-                <form action="/learn" method="post">
+                <form action="/simguistic/learn" method="post">
                     <button type="submit">Start Learning</button>
                 </form>
-                <form action="/review" method="get">
+                <form action="/simguistic/review" method="get">
                     <button type="submit">Review Due Words</button>  <!-- Review Button -->
                 </form>
-                <form action="/word_list" method="get">
+                <form action="/simguistic/word_list" method="get">
                     <button type="submit">View Word List</button>
                 </form>
             </main>
@@ -277,7 +277,7 @@ def show_translation():
         </head>
         <body>
             <h1>English: '{{ word['english'] }}', Swahili: '{{ word['swahili'] }}'</h1>
-            <form action="/next_word" method="get">
+            <form action="/simguistic/next_word" method="get">
                 <button type="submit" id="continue-button">Continue</button>
             </form>
             <script>
