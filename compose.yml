@@ -1,0 +1,12 @@
+services:
+  web:
+    image: python:3.8-slim
+    container_name: simguistic
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    command: sh -c "pip install -r requirements.txt && flask run --host=0.0.0.0"
+    environment:
+      FLASK_APP: main.py 
