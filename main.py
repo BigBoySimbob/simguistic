@@ -71,6 +71,7 @@ def index():
             <header>Simguistic</header>
             <main>
                 <h1>Welcome to Simguistic</h1>
+                <h2>This site is under development</h2>
                 <form action="/learn" method="post">
                     <button type="submit">Start Learning</button>
                 </form>
