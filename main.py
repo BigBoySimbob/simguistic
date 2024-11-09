@@ -47,7 +47,7 @@ current_words = []
 correct_count = {}
 introduced_words = set()
 
-@app.route('/')
+@app.route('/simguistic')
 def index():
     return render_template_string('''
         <!DOCTYPE html>
@@ -104,7 +104,7 @@ def format_due_time(due_str):
         return "Invalid date"  # In case of invalid date format
 
 
-@app.route('/word_list', methods=['GET', 'POST'])
+@app.route('/simguistic/word_list', methods=['GET', 'POST'])
 def word_list_view():
     global word_list
     
@@ -208,7 +208,7 @@ def word_list_view():
                 <button type="submit" class="button">Add Word</button>
             </form>
             
-            <br><a href="/">Back to Home</a>
+            <br><a href="/simguistic">Back to Home</a>
         </body>
         </html>
     ''', learned_words=learned_words, not_learned_words=not_learned_words, format_due_time=format_due_time)
@@ -216,7 +216,7 @@ def word_list_view():
 
 
 
-@app.route('/learn', methods=['POST', 'GET'])
+@app.route('/simguistic/learn', methods=['POST', 'GET'])
 def learn():
     global current_words, correct_count, introduced_words
     if request.method == 'POST':
@@ -240,7 +240,7 @@ def learn():
                 <body>
                     <h1>No More Words to Learn</h1>
                     <p>You have learned all the available words.</p>
-                    <a href="/" class="button">Back to Home</a>
+                    <a href="/simguistic" class="button">Back to Home</a>
                 </body>
                 </html>
             ''')
@@ -254,7 +254,7 @@ def learn():
 
     return redirect(url_for('index'))
 
-@app.route('/show_translation', methods=['GET', 'POST'])
+@app.route('/simguistic/show_translation', methods=['GET', 'POST'])
 def show_translation():
     global current_words, introduced_words
     if len(current_words) == 0:
@@ -291,7 +291,7 @@ def show_translation():
         </html>
     ''', word=word)
 
-@app.route('/next_word', methods=['GET', 'POST'])
+@app.route('/simguistic/next_word', methods=['GET', 'POST'])
 def next_word():
     global current_words, correct_count
 
@@ -395,7 +395,7 @@ def next_word():
     ''', word=word)
 
 # Route to review words that are due for the day
-@app.route('/review', methods=['GET', 'POST'])
+@app.route('/simguistic/review', methods=['GET', 'POST'])
 def review():
     global current_words, correct_count
 
@@ -440,7 +440,7 @@ def review():
                 <body>
                     <h1>No More Words to Review</h1>
                     <p>All due words have been reviewed.</p>
-                    <a href="/" class="button">Back to Home</a>
+                    <a href="/simguistic" class="button">Back to Home</a>
                 </body>
                 </html>
             ''')
@@ -470,7 +470,7 @@ def review():
             <body>
                 <h1>No Words Due for Review</h1>
                 <p>There are currently no words that need reviewing.</p>
-                <a href="/" class="button">Back to Home</a>
+                <a href="/simguistic" class="button">Back to Home</a>
             </body>
             </html>
         ''')
