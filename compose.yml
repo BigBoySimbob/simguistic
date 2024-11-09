@@ -7,6 +7,7 @@ services:
       - .:/app
     ports:
       - "5000:5000"
-    command: sh -c "pip install -r requirements.txt && flask run --host=0.0.0.0"
+    command: sh -c "pip install -r requirements.txt && gunicorn -b 0.0.0.0:5000 --reload main:app"
     environment:
-      FLASK_APP: main.py 
+      FLASK_APP: main.py
+      FLASK_ENV: production
