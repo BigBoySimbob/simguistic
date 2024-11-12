@@ -312,6 +312,7 @@ def next_word():
             
             # Check if the word has been learned by answering correctly three times in a row
             if correct_count[word] >= 3:
+                # Update the word's status to "learned" and remove it from current_words
                 correct_word['status'] = 'h4'
                 due_time = datetime.now() + REVIEW_INTERVALS['']
                 rounded_due_time = due_time.replace(second=0, microsecond=0)
@@ -326,31 +327,12 @@ def next_word():
                 current_words = [w for w in current_words if w['english'] != word]
                 learned_message = "Correct - New word added to review"
 
-            return render_template_string('''
-                <html>
-                <head>
-                    <title>Simguistic - Learning</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-                        h1 { color: #2c3e50; }
-                        .correct { color: green; font-size: 1.2em; margin-top: 10px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Translate '{{ correct_word['english'] }}' to Swahili:</h1>
-                    <form method="post" id="answer-form">
-                        <input type="hidden" name="word" value="{{ correct_word['english'] }}">
-                        <input type="text" name="translation" value="{{ user_translation }}" readonly>
-                    </form>
-                    <div class="correct">{{ learned_message }}</div>
-                    <script>
-                        setTimeout(function() {
-                            window.location.href = "/simguistic/show_translation";
-                        }, 1000);
-                    </script>
-                </body>
-                </html>
-            ''', user_translation=user_translation, correct_word=correct_word, learned_message=learned_message)
+                # Check if there are no more words left to learn
+                if not current_words:
+                    return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
+
+            # Proceed to the next word
+            return redirect(url_for('show_translation'))
 
         else:
             # Reset correct count if the answer is incorrect
@@ -380,7 +362,7 @@ def next_word():
             ''', user_translation=user_translation, correct_word=correct_word)
 
     # If there are no more words to test, display a completion message
-    if len(current_words) == 0:
+    if not current_words:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
     
     # Otherwise, continue testing with the next word
@@ -404,6 +386,7 @@ def next_word():
         </body>
         </html>
     ''', word=word)
+
 
 
 # Route to review words that are due for the day
