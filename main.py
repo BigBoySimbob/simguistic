@@ -245,10 +245,10 @@ def learn():
                 </html>
             ''')
 
-        # Select a subset of unknown words to learn and add 'introduced' flag
+        # Initialize unlearned words for learning session
         current_words = [{'english': w['english'], 'swahili': w['swahili'], 'introduced': False} for w in unknown_words[:LEARN_COUNT]]
         correct_count = {word['english']: 0 for word in current_words}
-        introduced_words = set()
+        introduced_words = set()  # Reset introduced words for the session
         return redirect(url_for('show_translation'))
 
     return redirect(url_for('index'))
@@ -263,10 +263,10 @@ def show_translation():
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
 
     # Select the first unintroduced word
-    word = next((w for w in current_words if not w['introduced']), None)
+    word = next((w for w in current_words if not w.get('introduced', False)), None)
     
     if word:
-        word['introduced'] = True  # Mark as introduced
+        word['introduced'] = True  # Mark word as introduced
         return render_template_string('''
             <html>
             <head>
@@ -312,13 +312,10 @@ def next_word():
             
             # Check if the word has been learned by answering correctly three times in a row
             if correct_count[word] >= 3:
-                # Mark the word as "learned" and remove it from current_words
+                # Mark the word as "learned" and update its status and due date
                 correct_word['status'] = 'h4'
                 due_time = datetime.now() + REVIEW_INTERVALS['']
-                rounded_due_time = due_time.replace(second=0, microsecond=0)
-                if due_time.second >= 30:
-                    rounded_due_time += timedelta(minutes=1)
-                correct_word['due'] = rounded_due_time.isoformat()
+                correct_word['due'] = due_time.replace(second=0, microsecond=0).isoformat()
                 
                 # Save the updated status and due time
                 save_word_list()
@@ -343,7 +340,7 @@ def next_word():
                     </style>
                 </head>
                 <body>
-                    <h1>Translate '{{ correct_word['english'] }}' to Swahili:</h1>
+                    <h1>Correct! - Translate '{{ correct_word['english'] }}' to Swahili</h1>
                     <p class="correct">{{ learned_message }}</p>
                     <form method="get" action="{{ url_for('show_translation') }}">
                         <button type="submit">Continue</button>
@@ -395,7 +392,7 @@ def next_word():
             </style>
         </head>
         <body>
-            <h1>Translate '{{ word['english'] }}' to Swahili:</h1>
+            <h1>Translate '{{ word['english'] }}' to Swahili</h1>
             <form method="post">
                 <input type="hidden" name="word" value="{{ word['english'] }}">
                 <input type="text" name="translation" autofocus required>
@@ -404,6 +401,7 @@ def next_word():
         </body>
         </html>
     ''', word=word)
+
 
 
 # Route to review words that are due for the day
