@@ -318,8 +318,12 @@ def next_word():
                 if due_time.second >= 30:
                     rounded_due_time += timedelta(minutes=1)
                 correct_word['due'] = rounded_due_time.isoformat()
-                current_words = [w for w in current_words if w['english'] != word]
+                
+                # Save the updated status and due time
                 save_word_list()
+                
+                # Remove the learned word from current_words
+                current_words = [w for w in current_words if w['english'] != word]
                 learned_message = "Correct - New word added to review"
 
             return render_template_string('''
@@ -375,9 +379,11 @@ def next_word():
                 </html>
             ''', user_translation=user_translation, correct_word=correct_word)
 
+    # If there are no more words to test, display a completion message
     if len(current_words) == 0:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
     
+    # Otherwise, continue testing with the next word
     word = current_words[0]
     return render_template_string('''
         <html>
