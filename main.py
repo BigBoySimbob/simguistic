@@ -291,58 +291,82 @@ def show_translation():
         </html>
     ''', word=word)
 
-@app.route('/simguistic/next_word', methods=['GET', 'POST'])
-def next_word():
-    global current_words, correct_count
+    @app.route('/simguistic/next_word', methods=['GET', 'POST'])
+    def next_word():
+        global current_words, correct_count
 
-    if request.method == 'POST':
-        word = request.form.get('word')
-        user_translation = request.form.get('translation').strip().lower()
-        correct_word = next((w for w in current_words if w['english'] == word), None)
-        
-        if correct_word and user_translation == correct_word['swahili'].lower():
-            correct_count[word] += 1
-            learned_message = "Correct"
+        if request.method == 'POST':
+            word = request.form.get('word')
+            user_translation = request.form.get('translation').strip().lower()
+            correct_word = next((w for w in current_words if w['english'] == word), None)
             
-            # Check if the word has been learned
-            if correct_count[word] >= 3:
-                correct_word['status'] = 'h4'
-                due_time = datetime.now() + REVIEW_INTERVALS['']  # Or timedelta(hours=4) for /review route
-                rounded_due_time = due_time.replace(second=0, microsecond=0)  # Round to the nearest minute
-                if due_time.second >= 30:
-                    rounded_due_time += timedelta(minutes=1)
-                correct_word['due'] = rounded_due_time.isoformat()
-                current_words = [w for w in current_words if w['english'] != word]
-                save_word_list()
-                learned_message = "Correct - New word added to review"
+            if correct_word and user_translation == correct_word['swahili'].lower():
+                correct_count[word] += 1
+                learned_message = "Correct"
+                
+                # Check if the word has been learned
+                if correct_count[word] >= 3:
+                    correct_word['status'] = 'h4'
+                    due_time = datetime.now() + REVIEW_INTERVALS['']
+                    rounded_due_time = due_time.replace(second=0, microsecond=0)
+                    if due_time.second >= 30:
+                        rounded_due_time += timedelta(minutes=1)
+                    correct_word['due'] = rounded_due_time.isoformat()
+                    current_words = [w for w in current_words if w['english'] != word]
+                    save_word_list()
+                    learned_message = "Correct - New word added to review"
 
+                return render_template_string('''
+                    <html>
+                    <head>
+                        <title>Simguistic - Learning</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                            h1 { color: #2c3e50; }
+                            .correct { color: green; font-size: 1.2em; margin-top: 10px; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Translate '{{ correct_word['english'] }}' to Swahili:</h1>
+                        <form method="post" id="answer-form">
+                            <input type="hidden" name="word" value="{{ correct_word['english'] }}">
+                            <input type="text" name="translation" value="{{ user_translation }}" readonly>
+                        </form>
+                        <div class="correct">{{ learned_message }}</div>
+                        <script>
+                            setTimeout(function() {
+                                window.location.href = "/simguistic/show_translation";
+                            }, 1000);
+                        </script>
+                    </body>
+                    </html>
+                ''', user_translation=user_translation, correct_word=correct_word, learned_message=learned_message)
 
-            # Show the updated message, then proceed to the next word
-            return render_template_string('''
-                <html>
-                <head>
-                    <title>Simguistic - Learning</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-                        h1 { color: #2c3e50; }
-                        .correct { color: green; font-size: 1.2em; margin-top: 10px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Translate '{{ correct_word['english'] }}' to Swahili:</h1>
-                    <form method="post" id="answer-form">
-                        <input type="hidden" name="word" value="{{ correct_word['english'] }}">
-                        <input type="text" name="translation" value="{{ user_translation }}" readonly>
-                    </form>
-                    <div class="correct">{{ learned_message }}</div>  <!-- Display the updated message here -->
-                    <script>
-                        setTimeout(function() {
-                            window.location.href = "/simguistic/show_translation";
-                        }, 1000);
-                    </script>
-                </body>
-                </html>
-            ''', user_translation=user_translation, correct_word=correct_word, learned_message=learned_message)
+            else:
+                return render_template_string('''
+                    <html>
+                    <head>
+                        <title>Simguistic - Learning</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                            h1 { color: #2c3e50; }
+                            .incorrect { color: red; }
+                            .correct { color: green; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Your answer: <span class="incorrect">{{ user_translation }}</span></h1>
+                        <h1>Correct answer: <span class="correct">{{ correct_word['swahili'] }}</span></h1>
+                        <p>Please type the correct answer to proceed.</p>
+                        <form method="post">
+                            <input type="hidden" name="word" value="{{ correct_word['english'] }}">
+                            <input type="text" name="translation" placeholder="Enter the correct word" required autofocus>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </body>
+                    </html>
+                ''', user_translation=user_translation, correct_word=correct_word)
+
 
         # Handle incorrect answer feedback (as previously modified)
         else:
