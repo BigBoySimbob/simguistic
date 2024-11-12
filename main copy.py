@@ -47,7 +47,7 @@ current_words = []
 correct_count = {}
 introduced_words = set()
 
-@app.route('/')
+@app.route('/simguistic')
 def index():
     return render_template_string('''
         <!DOCTYPE html>
@@ -71,13 +71,14 @@ def index():
             <header>Simguistic</header>
             <main>
                 <h1>Welcome to Simguistic</h1>
-                <form action="/learn" method="post">
+                <h2>This site is under development :)</h2>
+                <form action="/simguistic/learn" method="post">
                     <button type="submit">Start Learning</button>
                 </form>
-                <form action="/review" method="get">
+                <form action="/simguistic/review" method="get">
                     <button type="submit">Review Due Words</button>  <!-- Review Button -->
                 </form>
-                <form action="/word_list" method="get">
+                <form action="/simguistic/word_list" method="get">
                     <button type="submit">View Word List</button>
                 </form>
             </main>
@@ -103,7 +104,7 @@ def format_due_time(due_str):
         return "Invalid date"  # In case of invalid date format
 
 
-@app.route('/word_list', methods=['GET', 'POST'])
+@app.route('/simguistic/word_list', methods=['GET', 'POST'])
 def word_list_view():
     global word_list
     
@@ -207,7 +208,7 @@ def word_list_view():
                 <button type="submit" class="button">Add Word</button>
             </form>
             
-            <br><a href="/">Back to Home</a>
+            <br><a href="/simguistic">Back to Home</a>
         </body>
         </html>
     ''', learned_words=learned_words, not_learned_words=not_learned_words, format_due_time=format_due_time)
@@ -215,7 +216,7 @@ def word_list_view():
 
 
 
-@app.route('/learn', methods=['POST', 'GET'])
+@app.route('/simguistic/learn', methods=['POST', 'GET'])
 def learn():
     global current_words, correct_count, introduced_words
     if request.method == 'POST':
@@ -239,58 +240,63 @@ def learn():
                 <body>
                     <h1>No More Words to Learn</h1>
                     <p>You have learned all the available words.</p>
-                    <a href="/" class="button">Back to Home</a>
+                    <a href="/simguistic" class="button">Back to Home</a>
                 </body>
                 </html>
             ''')
 
-        
-        # Select a subset of unknown words to learn
-        current_words = unknown_words[:LEARN_COUNT]
+        # Initialize unlearned words for learning session
+        current_words = [{'english': w['english'], 'swahili': w['swahili'], 'introduced': False} for w in unknown_words[:LEARN_COUNT]]
         correct_count = {word['english']: 0 for word in current_words}
-        introduced_words = set()
+        introduced_words = set()  # Reset introduced words for the session
         return redirect(url_for('show_translation'))
 
     return redirect(url_for('index'))
 
-@app.route('/show_translation', methods=['GET', 'POST'])
+
+@app.route('/simguistic/show_translation', methods=['GET', 'POST'])
 def show_translation():
-    global current_words, introduced_words
+    global current_words
+
+    # Check if there are no more words to learn
     if len(current_words) == 0:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
+
+    # Select the first unintroduced word
+    word = next((w for w in current_words if not w.get('introduced', False)), None)
     
-    # Show a word that hasn't been introduced yet
-    word = next((w for w in current_words if w['english'] not in introduced_words), None)
-    if word is None:
-        return redirect(url_for('next_word'))
+    if word:
+        word['introduced'] = True  # Mark word as introduced
+        return render_template_string('''
+            <html>
+            <head>
+                <title>Learning</title>
+                <style>
+                    body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                    h1 { color: #2c3e50; }
+                </style>
+            </head>
+            <body>
+                <h1>English: '{{ word['english'] }}', Swahili: '{{ word['swahili'] }}'</h1>
+                <form action="/simguistic/next_word" method="get">
+                    <button type="submit" id="continue-button">Continue</button>
+                </form>
+                <script>
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter') {
+                            document.getElementById('continue-button').click();
+                        }
+                    });
+                </script>
+            </body>
+            </html>
+        ''', word=word)
 
-    introduced_words.add(word['english'])
-    return render_template_string('''
-        <html>
-        <head>
-            <title>Learning</title>
-            <style>
-                body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-                h1 { color: #2c3e50; }
-            </style>
-        </head>
-        <body>
-            <h1>English: '{{ word['english'] }}', Swahili: '{{ word['swahili'] }}'</h1>
-            <form action="/next_word" method="get">
-                <button type="submit" id="continue-button">Continue</button>
-            </form>
-            <script>
-                document.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        document.getElementById('continue-button').click();
-                    }
-                });
-            </script>
-        </body>
-        </html>
-    ''', word=word)
+    # If all words have been introduced, proceed to testing
+    return redirect(url_for('next_word'))
 
-@app.route('/next_word', methods=['GET', 'POST'])
+
+@app.route('/simguistic/next_word', methods=['GET', 'POST'])
 def next_word():
     global current_words, correct_count
 
@@ -300,23 +306,29 @@ def next_word():
         correct_word = next((w for w in current_words if w['english'] == word), None)
         
         if correct_word and user_translation == correct_word['swahili'].lower():
+            # Increment correct count for the word
             correct_count[word] += 1
             learned_message = "Correct"
             
-            # Check if the word has been learned
+            # Check if the word has been learned by answering correctly three times in a row
             if correct_count[word] >= 3:
+                # Mark the word as "learned" and update its status and due date
                 correct_word['status'] = 'h4'
-                due_time = datetime.now() + REVIEW_INTERVALS['']  # Or timedelta(hours=4) for /review route
-                rounded_due_time = due_time.replace(second=0, microsecond=0)  # Round to the nearest minute
-                if due_time.second >= 30:
-                    rounded_due_time += timedelta(minutes=1)
-                correct_word['due'] = rounded_due_time.isoformat()
-                current_words = [w for w in current_words if w['english'] != word]
+                due_time = datetime.now() + REVIEW_INTERVALS['']
+                correct_word['due'] = due_time.replace(second=0, microsecond=0).isoformat()
+                
+                # Save the updated status and due time
                 save_word_list()
+                
+                # Remove the learned word from current_words
+                current_words = [w for w in current_words if w['english'] != word]
                 learned_message = "Correct - New word added to review"
 
+                # Check if there are no more words left to learn
+                if not current_words:
+                    return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
 
-            # Show the updated message, then proceed to the next word
+            # Display the correct answer message and proceed to the next word
             return render_template_string('''
                 <html>
                 <head>
@@ -328,23 +340,18 @@ def next_word():
                     </style>
                 </head>
                 <body>
-                    <h1>Translate '{{ correct_word['english'] }}' to Swahili:</h1>
-                    <form method="post" id="answer-form">
-                        <input type="hidden" name="word" value="{{ correct_word['english'] }}">
-                        <input type="text" name="translation" value="{{ user_translation }}" readonly>
+                    <h1>Correct! - Translate '{{ correct_word['english'] }}' to Swahili</h1>
+                    <p class="correct">{{ learned_message }}</p>
+                    <form method="get" action="{{ url_for('show_translation') }}">
+                        <button type="submit">Continue</button>
                     </form>
-                    <div class="correct">{{ learned_message }}</div>  <!-- Display the updated message here -->
-                    <script>
-                        setTimeout(function() {
-                            window.location.href = "/show_translation";
-                        }, 1000);
-                    </script>
                 </body>
                 </html>
-            ''', user_translation=user_translation, correct_word=correct_word, learned_message=learned_message)
+            ''', correct_word=correct_word, learned_message=learned_message)
 
-        # Handle incorrect answer feedback (as previously modified)
         else:
+            # Reset correct count if the answer is incorrect
+            correct_count[word] = 0
             return render_template_string('''
                 <html>
                 <head>
@@ -369,9 +376,11 @@ def next_word():
                 </html>
             ''', user_translation=user_translation, correct_word=correct_word)
 
-    if len(current_words) == 0:
+    # If there are no more words to test, display a completion message
+    if not current_words:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
     
+    # Otherwise, continue testing with the next word
     word = current_words[0]
     return render_template_string('''
         <html>
@@ -383,7 +392,7 @@ def next_word():
             </style>
         </head>
         <body>
-            <h1>Translate '{{ word['english'] }}' to Swahili:</h1>
+            <h1>Translate '{{ word['english'] }}' to Swahili</h1>
             <form method="post">
                 <input type="hidden" name="word" value="{{ word['english'] }}">
                 <input type="text" name="translation" autofocus required>
@@ -393,8 +402,10 @@ def next_word():
         </html>
     ''', word=word)
 
+
+
 # Route to review words that are due for the day
-@app.route('/review', methods=['GET', 'POST'])
+@app.route('/simguistic/review', methods=['GET', 'POST'])
 def review():
     global current_words, correct_count
 
@@ -439,7 +450,7 @@ def review():
                 <body>
                     <h1>No More Words to Review</h1>
                     <p>All due words have been reviewed.</p>
-                    <a href="/" class="button">Back to Home</a>
+                    <a href="/simguistic" class="button">Back to Home</a>
                 </body>
                 </html>
             ''')
@@ -469,7 +480,7 @@ def review():
             <body>
                 <h1>No Words Due for Review</h1>
                 <p>There are currently no words that need reviewing.</p>
-                <a href="/" class="button">Back to Home</a>
+                <a href="/simguistic" class="button">Back to Home</a>
             </body>
             </html>
         ''')
@@ -499,12 +510,6 @@ def review():
 if __name__ == '__main__':
     app.run(debug=True)
 
-# Function to calculate next review date based on the number of correct attempts
+# Function to calculate next review date based on the current status
 def calculate_next_due(status):
-    if status == 'learned':
-        return datetime.now() + timedelta(days=1)
-    elif status == 'review':
-        return datetime.now() + timedelta(days=3)
-    else:
-        return datetime.now() + timedelta(days=7)
-
+    return datetime.now() + REVIEW_INTERVALS.get(status, timedelta(days=7))

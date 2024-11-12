@@ -14,14 +14,25 @@ REVIEW_INTERVALS = {
     'd96': timedelta(days=180)    
 }
 
+import os
+
 def load_word_list(file_path='word_list.csv'):
     global word_list
+    if not os.path.exists(file_path):
+        print(f"File not found: {file_path}")
+        return
+    
     try:
         with open(file_path, mode='r') as file:
             reader = csv.DictReader(file)
             word_list = [row for row in reader]
-    except FileNotFoundError:
-        print("Word list not found.")
+            if word_list:
+                print(f"Loaded {len(word_list)} words from {file_path}")
+            else:
+                print(f"File {file_path} is empty or has invalid data.")
+    except Exception as e:
+        print(f"Error loading file {file_path}: {e}")
+
 
 def save_word_list(file_path='word_list.csv'):
     global word_list

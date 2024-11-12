@@ -11,9 +11,23 @@ correct_count = {}
 @learning_bp.route('/learn', methods=['POST', 'GET'])
 def learn():
     global current_words, correct_count, introduced_words
+
+    # Ensure the word list is loaded
+    load_word_list()
+    if not word_list:
+        print("Word list is empty or not loaded. Ensure word_list.csv is accessible and has data.")
+        return "<h1>No words found in the word list. Please check word_list.csv.</h1>"
+
     if request.method == 'POST':
-        unknown_words = [word for word in word_list if word['status'] == '']
+        # Filter for words that have not been learned (status is empty)
+        unknown_words = [word for word in word_list if word.get('status', '') == '']
+        
+        # Debug output to check if unknown words are being selected
+        print(f"Unknown words selected for learning: {len(unknown_words)} words")
+
         if len(unknown_words) == 0:
+            # No words left to learn
+            print("No more words to learn.")
             return render_template_string('''
                 <!DOCTYPE html>
                 <html lang="en">
@@ -41,7 +55,13 @@ def learn():
         current_words = [{'english': w['english'], 'swahili': w['swahili'], 'introduced': False} for w in unknown_words[:LEARN_COUNT]]
         correct_count = {word['english']: 0 for word in current_words}
         introduced_words = set()  # Reset introduced words for the session
+        
+        # Debug output to verify current_words and correct_count initialization
+        print(f"Current session words initialized with {len(current_words)} words.")
+        print(f"Initial correct_count: {correct_count}")
+
     return redirect(url_for('learning.show_translation'))
+
 
 @learning_bp.route('/show_translation', methods=['GET', 'POST'])
 def show_translation():
