@@ -245,51 +245,56 @@ def learn():
                 </html>
             ''')
 
-        
-        # Select a subset of unknown words to learn
-        current_words = unknown_words[:LEARN_COUNT]
+        # Select a subset of unknown words to learn and add 'introduced' flag
+        current_words = [{'english': w['english'], 'swahili': w['swahili'], 'introduced': False} for w in unknown_words[:LEARN_COUNT]]
         correct_count = {word['english']: 0 for word in current_words}
         introduced_words = set()
         return redirect(url_for('show_translation'))
 
     return redirect(url_for('index'))
 
+
 @app.route('/simguistic/show_translation', methods=['GET', 'POST'])
 def show_translation():
-    global current_words, introduced_words
+    global current_words
+
+    # Check if there are no more words to learn
     if len(current_words) == 0:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
-    
-    # Show a word that hasn't been introduced yet
-    word = next((w for w in current_words if w['english'] not in introduced_words), None)
-    if word is None:
-        return redirect(url_for('next_word'))
 
-    introduced_words.add(word['english'])
-    return render_template_string('''
-        <html>
-        <head>
-            <title>Learning</title>
-            <style>
-                body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-                h1 { color: #2c3e50; }
-            </style>
-        </head>
-        <body>
-            <h1>English: '{{ word['english'] }}', Swahili: '{{ word['swahili'] }}'</h1>
-            <form action="/simguistic/next_word" method="get">
-                <button type="submit" id="continue-button">Continue</button>
-            </form>
-            <script>
-                document.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        document.getElementById('continue-button').click();
-                    }
-                });
-            </script>
-        </body>
-        </html>
-    ''', word=word)
+    # Select the first unintroduced word
+    word = next((w for w in current_words if not w['introduced']), None)
+    
+    if word:
+        word['introduced'] = True  # Mark as introduced
+        return render_template_string('''
+            <html>
+            <head>
+                <title>Learning</title>
+                <style>
+                    body { font-family: Arial, sans-serif; background-color: #f7f8fa; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                    h1 { color: #2c3e50; }
+                </style>
+            </head>
+            <body>
+                <h1>English: '{{ word['english'] }}', Swahili: '{{ word['swahili'] }}'</h1>
+                <form action="/simguistic/next_word" method="get">
+                    <button type="submit" id="continue-button">Continue</button>
+                </form>
+                <script>
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter') {
+                            document.getElementById('continue-button').click();
+                        }
+                    });
+                </script>
+            </body>
+            </html>
+        ''', word=word)
+
+    # If all words have been introduced, proceed to testing
+    return redirect(url_for('next_word'))
+
 
 @app.route('/simguistic/next_word', methods=['GET', 'POST'])
 def next_word():
@@ -356,7 +361,7 @@ def next_word():
                 </head>
                 <body>
                     <h1>Your answer: <span class="incorrect">{{ user_translation }}</span></h1>
-                    <h1>Correct answer: <span class="correct">{{ correct_word['swahili'] }}</span></h1>
+                    <h1>Correct answer: <span class="correct">{{ correct_answer }}</span></h1>
                     <p>Please type the correct answer to proceed.</p>
                     <form method="post">
                         <input type="hidden" name="word" value="{{ correct_word['english'] }}">
@@ -365,7 +370,8 @@ def next_word():
                     </form>
                 </body>
                 </html>
-            ''', user_translation=user_translation, correct_word=correct_word)
+            ''', user_translation=user_translation, correct_answer=correct_word['swahili'], correct_word=correct_word)
+
 
     if len(current_words) == 0:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
