@@ -306,10 +306,11 @@ def next_word():
         correct_word = next((w for w in current_words if w['english'] == word), None)
         
         if correct_word and user_translation == correct_word['swahili'].lower():
+            # Increment correct count for the word
             correct_count[word] += 1
             learned_message = "Correct"
             
-            # Check if the word has been learned
+            # Check if the word has been learned by answering correctly three times in a row
             if correct_count[word] >= 3:
                 correct_word['status'] = 'h4'
                 due_time = datetime.now() + REVIEW_INTERVALS['']
@@ -348,6 +349,8 @@ def next_word():
             ''', user_translation=user_translation, correct_word=correct_word, learned_message=learned_message)
 
         else:
+            # Reset correct count if the answer is incorrect
+            correct_count[word] = 0
             return render_template_string('''
                 <html>
                 <head>
@@ -361,7 +364,7 @@ def next_word():
                 </head>
                 <body>
                     <h1>Your answer: <span class="incorrect">{{ user_translation }}</span></h1>
-                    <h1>Correct answer: <span class="correct">{{ correct_answer }}</span></h1>
+                    <h1>Correct answer: <span class="correct">{{ correct_word['swahili'] }}</span></h1>
                     <p>Please type the correct answer to proceed.</p>
                     <form method="post">
                         <input type="hidden" name="word" value="{{ correct_word['english'] }}">
@@ -370,8 +373,7 @@ def next_word():
                     </form>
                 </body>
                 </html>
-            ''', user_translation=user_translation, correct_answer=correct_word['swahili'], correct_word=correct_word)
-
+            ''', user_translation=user_translation, correct_word=correct_word)
 
     if len(current_words) == 0:
         return "<h1>You have learned all selected words!</h1><a href='/'>Back to Home</a>"
@@ -396,6 +398,7 @@ def next_word():
         </body>
         </html>
     ''', word=word)
+
 
 # Route to review words that are due for the day
 @app.route('/simguistic/review', methods=['GET', 'POST'])
