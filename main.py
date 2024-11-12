@@ -337,7 +337,7 @@ def next_word():
                     <div class="correct">{{ learned_message }}</div>  <!-- Display the updated message here -->
                     <script>
                         setTimeout(function() {
-                            window.location.href = "/show_translation";
+                            window.location.href = "/simguistic/show_translation";
                         }, 1000);
                     </script>
                 </body>
