@@ -14,7 +14,7 @@ def get_users():
         os.makedirs(users_dir)
     for filename in os.listdir(users_dir):
         if filename.endswith('_wordlist.csv'):
-            username = filename[:-14]  # Removes '_wordlist.csv' from the filename
+            username = filename[:-13]  # Removes '_wordlist.csv' from the filename
             users.append(username)
     return users
 
