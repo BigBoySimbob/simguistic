@@ -8,7 +8,7 @@
 <p class="error">{{ error }}</p>
 {% endif %}
 
-{% if state != 'correct' and state != 'incorrect' and message %}
+{% if state != 'correct' and message %}
 <p class="message">{{ message }}</p>
 {% endif %}
 
@@ -18,26 +18,21 @@
         <input type="text" name="user_input" placeholder="Enter Swahili translation" required autofocus>
         <button type="submit">Submit</button>
     </form>
+{% elif state == 'correction' %}
+    <p><strong>Translate into Swahili:</strong> {{ english_word }}</p>
+    <p><span class="incorrect">Your answer: {{ user_input }}</span></p>
+    <p><span class="correct">Correct translation: {{ correct_translation }}</span></p>
+    <p>Please type the correct translation to proceed.</p>
+    <form action="{{ url_for('review') }}" method="post">
+        <input type="text" name="user_input" placeholder="Enter the correct translation" required autofocus>
+        <button type="submit">Submit</button>
+    </form>
 {% elif state == 'correct' %}
     <p><strong>Translate into Swahili:</strong> {{ english_word }}</p>
     <form action="{{ url_for('review') }}" method="post" id="auto-submit-form">
         <input type="text" name="user_input" value="{{ user_input }}" readonly>
         <button type="submit" disabled>Submit</button>
         <p><span class="correct">{{ message }}</span></p>
-    </form>
-    <script>
-        setTimeout(function() {
-            document.getElementById('auto-submit-form').submit();
-        }, 2000);
-    </script>
-{% elif state == 'incorrect' %}
-    <p><strong>Translate into Swahili:</strong> {{ english_word }}</p>
-    <p><span class="incorrect">Your answer: {{ user_input }}</span></p>
-    <p><span class="correct">Correct translation: {{ correct_translation }}</span></p>
-    <p><span class="incorrect">{{ error }}</span></p>
-    <form action="{{ url_for('review') }}" method="post" id="auto-submit-form">
-        <input type="text" name="user_input" value="{{ user_input }}" readonly>
-        <button type="submit" disabled>Submit</button>
     </form>
     <script>
         setTimeout(function() {

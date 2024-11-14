@@ -111,11 +111,8 @@ def process_review_input(user_input):
             update_word_in_wordlist(wordlist, current_word)
             save_wordlist(username, wordlist)
 
-            # Add the word back into the queue at a random position
-            insert_index = random.randint(1, len(session['review_queue']))
-            session['review_queue'].insert(insert_index, current_word)
-
-            session['review_state'] = 'incorrect'
+            # Do not move to next word; ask user to input the correct translation
+            session['review_state'] = 'correction'
             session['last_user_input'] = user_input
             session['correct_translation'] = correct_translation
 
@@ -124,27 +121,31 @@ def process_review_input(user_input):
                 'user_input': user_input,
                 'correct_translation': correct_translation,
                 'error': 'Incorrect.',
-                'state': 'incorrect',
-                'delay': True
+                'state': 'correction'
             }
 
-    elif review_state == 'incorrect':
-        # Move on to next word
-        if session['review_words'] or session['review_queue']:
-            if not session['review_queue']:
-                prepare_review_queue()
-            next_word = session['review_queue'].pop(0)
-            session['current_review_word'] = next_word
-            session['review_state'] = 'testing'
+    elif review_state == 'correction':
+        if user_input_clean == correct_answer:
+            # User has now input the correct translation
+            message = 'Correct!'
+            session['review_state'] = 'correct'
+            session['last_user_input'] = user_input
+
             return {
-                'english_word': next_word['english'],
-                'state': 'testing'
+                'english_word': current_word['english'],
+                'user_input': user_input,
+                'message': message,
+                'state': 'correct',
+                'delay': True
             }
         else:
-            session.clear()
+            # User still incorrect, ask again
             return {
-                'message': 'Review session completed!',
-                'state': 'completed'
+                'english_word': current_word['english'],
+                'user_input': user_input,
+                'correct_translation': correct_translation,
+                'error': 'Please type the correct translation to proceed.',
+                'state': 'correction'
             }
 
     elif review_state == 'correct':
