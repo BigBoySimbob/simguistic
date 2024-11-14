@@ -8,18 +8,67 @@
 <p class="error">{{ error }}</p>
 {% endif %}
 
-{% if message %}
+{% if state != 'correct' and message %}
 <p class="message">{{ message }}</p>
 {% endif %}
 
-{% if english_word %}
-<p><strong>Translate:</strong> {{ english_word }}</p>
-<form action="{{ url_for('learn') }}" method="post">
-    <input type="text" name="user_input" placeholder="Enter Swahili translation" required autofocus>
-    <button type="submit">Submit</button>
-</form>
+{% if state == 'presentation' %}
+    <p><strong>English:</strong> {{ english_word }}</p>
+    <p><strong>Swahili:</strong> {{ swahili_word }}</p>
+    <form action="{{ url_for('learn') }}" method="post">
+        <input type="hidden" name="user_input" value="continue">
+        <button type="submit">Continue</button>
+    </form>
+{% elif state == 'testing' or state == 'correct' %}
+    <p><strong>Translate into Swahili:</strong> {{ english_word }}</p>
+    <form action="{{ url_for('learn') }}" method="post" id="auto-submit-form">
+        {% if state == 'correct' %}
+            <input type="text" name="user_input" value="{{ user_input }}" readonly>
+            <button type="submit" disabled>Submit</button>
+            <p><span class="correct">{{ message }}</span></p>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('auto-submit-form').submit();
+                }, 2000);
+            </script>
+        {% else %}
+            <input type="text" name="user_input" placeholder="Enter Swahili translation" required autofocus>
+            <button type="submit">Submit</button>
+        {% endif %}
+    </form>
+{% elif state == 'correction' %}
+    <p><strong>Translate into Swahili:</strong> {{ english_word }}</p>
+    <p><span class="incorrect">Your answer: {{ user_input }}</span></p>
+    <p><span class="correct">Correct translation: {{ correct_translation }}</span></p>
+    <p>Please type the correct translation to proceed.</p>
+    <form action="{{ url_for('learn') }}" method="post">
+        <input type="text" name="user_input" placeholder="Enter the correct translation" required autofocus>
+        <button type="submit">Submit</button>
+    </form>
+{% elif state == 'completed' %}
+    <p>{{ message }}</p>
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ url_for('home') }}";
+        }, 2000);
+    </script>
 {% else %}
-<p>No words to learn at the moment.</p>
-<a href="{{ url_for('home') }}" class="btn">Back to Home</a>
+    <p>No words to learn at the moment.</p>
+    <a href="{{ url_for('home') }}" class="btn">Back to Home</a>
 {% endif %}
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    .incorrect {
+        color: red;
+    }
+    .correct {
+        color: green;
+    }
+    input[readonly] {
+        background-color: #f0f0f0;
+    }
+</style>
 {% endblock %}
