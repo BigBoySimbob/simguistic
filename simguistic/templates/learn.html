@@ -59,6 +59,17 @@
 
 {% endblock %}
 
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var input = document.querySelector('input[name="user_input"]');
+        if (input && !input.hasAttribute('readonly')) {
+            input.focus();
+        }
+    });
+</script>
+{% endblock %}
+
 {% block styles %}
 <style>
     .incorrect {
