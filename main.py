@@ -11,8 +11,8 @@ from wordlist_utils import get_word_counts
 
 app = Flask(
     __name__,
-    template_folder='/templates',
-    static_folder='/static',
+    template_folder='simguistic/templates',
+    static_folder='simguistic/static',
     static_url_path='/simguistic/static'
 )
 app.secret_key = 'your_secret_key'  # Use a secure random key in production
