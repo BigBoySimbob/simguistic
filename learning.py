@@ -3,10 +3,15 @@
 from flask import session
 from datetime import datetime, timedelta
 import random
-import string
+import string  # Import string module
 
 from user_management import get_current_user
 from wordlist_utils import load_wordlist, save_wordlist
+
+def normalize(text):
+    # Helper function to remove punctuation and convert to lowercase
+    translator = str.maketrans('', '', string.punctuation)
+    return text.translate(translator).strip().lower()
 
 def start_learning_session():
     username = get_current_user()
@@ -19,7 +24,8 @@ def start_learning_session():
         return {'message': 'All words have been learned!'}
 
     session['learning_words'] = unknown_words[:5]
-    session['learning_progress'] = {word['swahili'].strip().lower(): 0 for word in session['learning_words']}
+    # Use normalized keys for learning_progress
+    session['learning_progress'] = {normalize(word['swahili']): 0 for word in session['learning_words']}
     session['learning_queue'] = []
     session['presented_words'] = []
     session['learning_state'] = 'start'
@@ -63,28 +69,29 @@ def process_learning_input(user_input):
         }
     elif learning_state == 'testing':
         correct_translation = current_word['swahili']
-        translator = str.maketrans('', '', string.punctuation)
-        user_input_clean = user_input.translate(translator).strip().lower()
-        correct_answer = correct_translation.translate(translator).strip().lower()
+
+        # Normalize user input and correct translation
+        user_input_clean = normalize(user_input)
+        correct_answer = normalize(correct_translation)
 
         key = correct_answer  # Use the normalized correct answer as the key
         progress = session['learning_progress']
 
         if user_input_clean == correct_answer:
-            progress[key] += 1
+            progress[key] += 1  # Now this key exists in progress
 
             if progress[key] >= 3:
                 # Mark word as learned
                 wordlist = load_wordlist(username)
                 for word in wordlist:
-                    if word['swahili'].strip().lower() == key:
+                    if normalize(word['swahili']) == key:
                         word['status'] = 'h4'
                         now = datetime.now()
                         due_time = (now + timedelta(hours=4)).replace(second=0, microsecond=0)
                         word['due'] = due_time.isoformat()
                         break
                 save_wordlist(username, wordlist)
-                session['learning_words'] = [word for word in session['learning_words'] if word['swahili'].strip().lower() != key]
+                session['learning_words'] = [word for word in session['learning_words'] if normalize(word['swahili']) != key]
                 progress.pop(key, None)
                 message = 'New word learned!'
             else:
@@ -114,8 +121,10 @@ def process_learning_input(user_input):
             }
     elif learning_state == 'correction':
         correct_translation = current_word['swahili']
-        user_input_clean = user_input.strip().lower()
-        correct_answer = correct_translation.strip().lower()
+
+        # Normalize user input and correct translation
+        user_input_clean = normalize(user_input)
+        correct_answer = normalize(correct_translation)
 
         if user_input_clean == correct_answer:
             session['learning_state'] = 'testing'

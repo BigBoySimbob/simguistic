@@ -3,7 +3,7 @@
 from flask import session
 from datetime import datetime, timedelta
 import random
-import string
+import string  # Import string module
 
 from user_management import get_current_user
 from wordlist_utils import load_wordlist, save_wordlist
@@ -19,6 +19,11 @@ TIME_DELTAS = {
     'd96': timedelta(days=96),
     'd180': timedelta(days=180),
 }
+
+def normalize(text):
+    # Helper function to remove punctuation and convert to lowercase
+    translator = str.maketrans('', '', string.punctuation)
+    return text.translate(translator).strip().lower()
 
 def start_review_session():
     username = get_current_user()
@@ -67,9 +72,10 @@ def process_review_input(user_input):
 
     review_state = session.get('review_state', 'testing')
     correct_translation = current_word['swahili']
-    translator = str.maketrans('', '', string.punctuation)
-    user_input_clean = user_input.translate(translator).strip().lower()
-    correct_answer = correct_translation.translate(translator).strip().lower()
+
+    # Normalize user input and correct translation
+    user_input_clean = normalize(user_input)
+    correct_answer = normalize(correct_translation)
 
     wordlist = load_wordlist(username)
     now = datetime.now()
