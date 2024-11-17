@@ -17,7 +17,7 @@ def start_learning_session():
     if not unknown_words:
         return {'message': 'All words have been learned!'}
 
-    session['learning_words'] = unknown_words[:3]
+    session['learning_words'] = unknown_words[:5]
     session['learning_progress'] = {word['swahili'].strip().lower(): 0 for word in session['learning_words']}
     session['learning_queue'] = []
     session['presented_words'] = []
