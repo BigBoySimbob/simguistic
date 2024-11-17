@@ -62,4 +62,8 @@ def get_word_counts(username):
     total_learned = sum(1 for word in wordlist if word['status'])
     now = datetime.now()
     due_for_review = sum(1 for word in wordlist if word['status'] and word['due'] and datetime.fromisoformat(word['due']) <= now)
-    return total_learned, due_for_review
+    return total_learned, 
+
+def get_wordlist_filepath(username):
+    # Adjust the path according to where your wordlists are stored
+    return os.path.join('wordlists', f'{username}_wordlist.csv')
