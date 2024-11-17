@@ -1,13 +1,13 @@
 # main.py
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file, abort
 from datetime import datetime
 import os
 
 from user_management import get_users, set_current_user, get_current_user
 from learning import start_learning_session, process_learning_input
 from review import start_review_session, process_review_input
-from wordlist_utils import get_word_counts
+from wordlist_utils import get_word_counts, get_wordlist_filepath  # Import the new function
 
 app = Flask(
     __name__,
@@ -29,7 +29,6 @@ def home():
             'due_for_review': due_for_review
         }
     return render_template('home.html', users=users, current_user=current_user, user_stats=user_stats)
-
 
 @app.route('/simguistic/change_user', methods=['POST'])
 def change_user():
@@ -56,6 +55,16 @@ def review():
     else:
         result = start_review_session()
         return render_template('review.html', **result)
+
+@app.route('/simguistic/download_wordlist')
+def download_wordlist():
+    username = get_current_user()
+    if not username:
+        return redirect(url_for('home'))
+    filepath = get_wordlist_filepath(username)
+    if not os.path.exists(filepath):
+        abort(404)
+    return send_file(filepath, as_attachment=True, attachment_filename=f'{username}_wordlist.csv')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,6 +3,7 @@
 from flask import session
 from datetime import datetime, timedelta
 import random
+import string
 
 from user_management import get_current_user
 from wordlist_utils import load_wordlist, save_wordlist
@@ -66,8 +67,9 @@ def process_review_input(user_input):
 
     review_state = session.get('review_state', 'testing')
     correct_translation = current_word['swahili']
-    user_input_clean = user_input.strip().lower()
-    correct_answer = correct_translation.strip().lower()
+    translator = str.maketrans('', '', string.punctuation)
+    user_input_clean = user_input.translate(translator).strip().lower()
+    correct_answer = correct_translation.translate(translator).strip().lower()
 
     wordlist = load_wordlist(username)
     now = datetime.now()
