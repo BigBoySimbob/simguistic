@@ -56,15 +56,30 @@ def review():
         result = start_review_session()
         return render_template('review.html', **result)
 
-@app.route('/simguistic/download_wordlist')
+@app.route('/simguistic/download_wordlist', methods=['POST'])
 def download_wordlist():
+    """
+    Serves the wordlist CSV file for the current user.
+    """
     username = get_current_user()
     if not username:
+        # Redirect to home if no user is selected
         return redirect(url_for('home'))
+
+    # Get the filepath for the user's wordlist
     filepath = get_wordlist_filepath(username)
     if not os.path.exists(filepath):
-        abort(404)
-    return send_file(filepath, as_attachment=True, attachment_filename=f'{username}_wordlist.csv')
+        # Return a 404 error if the file does not exist
+        abort(404, description="Wordlist file not found")
+
+    # Serve the file for download
+    return send_file(
+        filepath,
+        as_attachment=True,
+        download_name=f'{username}_wordlist.csv'
+    )
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

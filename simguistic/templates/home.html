@@ -44,7 +44,9 @@
     <div class="buttons">
         <a href="{{ url_for('learn') }}" class="btn">Learn</a>
         <a href="{{ url_for('review') }}" class="btn">Review</a>
-        <a href="{{ url_for('download_wordlist') }}" class="btn">Download Wordlist</a>
+        <form id="download-form" action="{{ url_for('download_wordlist') }}" method="POST" style="display: inline;">
+            <button type="submit" class="btn">Download Wordlist</button>
+        </form>
     </div>
 </div>
 {% endif %}

@@ -62,28 +62,25 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var input = document.querySelector('input[name="user_input"]');
-        if (input) {
-            input.focus();
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    if (!input.hasAttribute('readonly')) {
-                        input.form.submit();
-                    }
-                }
-            });
-        }
+        // Keydown event listener for the entire page
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default Enter key behavior
 
-        var presentationForm = document.getElementById('presentation-form');
-        if (presentationForm) {
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
+                // Check for the presentation form
+                var presentationForm = document.getElementById('presentation-form');
+                if (presentationForm) {
                     presentationForm.submit();
+                    return;
                 }
-            });
-        }
+
+                // Check for the testing form
+                var learnForm = document.getElementById('learn-form');
+                if (learnForm) {
+                    learnForm.submit();
+                }
+            }
+        });
     });
 </script>
 {% endblock %}

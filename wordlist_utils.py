@@ -66,4 +66,4 @@ def get_word_counts(username):
 
 def get_wordlist_filepath(username):
     # Adjust the path according to where your wordlists are stored
-    return os.path.join('wordlists', f'{username}_wordlist.csv')
+    return os.path.join('users/', f'{username}_wordlist.csv')
