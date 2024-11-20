@@ -23,18 +23,24 @@
 <div class="user-overview">
     <h2>User Progress</h2>
     <table>
-        <tr>
-            <th>User</th>
-            <th>Words Learned</th>
-            <th>Due for Review</th>
-        </tr>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.capitalize() }}</td>
-            <td>{{ user_stats[user]['total_learned'] }}</td>
-            <td>{{ user_stats[user]['due_for_review'] }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Words Learned</th>
+                <th>Due for Review</th>
+                <th>Not Yet Learned</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.capitalize() }}</td>
+                <td>{{ user_stats[user]['total_learned'] }}</td>
+                <td>{{ user_stats[user]['due_for_review'] }}</td>
+                <td>{{ user_stats[user]['not_learned'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 

@@ -1,52 +1,89 @@
 english,swahili,status,due
-thing/matter/affair, jambo,h4,2024-11-19T10:55:09.991639
-how are you? lit. there is no matter with you? (sing.), hujambo?,h4,2024-11-19T11:03:12.152125
-how are you? lit. there is no matter with you? (pl.), hamjambo?,h4,2024-11-19T10:57:41.342143
-I am fine, sijambo,h4,2024-11-19T10:55:55.490317
-we are fine, hatujambo,h4,2024-11-19T11:00:05.499415
-news/information, habari,h4,2024-11-19T11:02:16.101837
-how are things? lit. News?, habari?,h4,2024-11-19T10:55:03.133905
-how are things? lit. News what sort?, habari gani?,h4,2024-11-19T11:00:26.477357
-how are you? lit. Your news? (sing.), habari yako?,h4,2024-11-19T11:02:45.143904
-how are you? lit. Your news? (pl.), habari zenu?,h4,2024-11-19T11:04:15.580466
-good/fine (nz...), nzuri,h4,2024-11-19T10:54:13.760872
-good/fine (nj...), njema,h4,2024-11-19T11:04:20.249082
-peaceful, salama,h4,2024-11-19T11:05:34.740047
+thing/matter/affair, jambo,h24,2024-11-20T11:33:53.970139
+how are you? lit. there is no matter with you? (sing.), hujambo?,h24,2024-11-20T11:30:57.964389
+how are you? lit. there is no matter with you? (pl.), hamjambo?,h24,2024-11-20T11:34:13.266961
+I am fine (lit. no matter), sijambo,h24,2024-11-20T11:33:01.083424
+we are fine, hatujambo,h24,2024-11-20T11:31:44.862706
+news/information, habari,h24,2024-11-20T11:31:56.457386
+how are things? lit. News?, habari?,h24,2024-11-20T11:33:38.366407
+how are things? lit. News what sort?, habari gani?,h24,2024-11-20T11:31:16.328880
+how are you? lit. Your news? (sing.), habari yako?,h24,2024-11-20T11:33:32.356593
+how are you? lit. Your news? (pl.), habari zenu?,h24,2024-11-20T11:32:17.223160
+good/fine (nz...), nzuri,h24,2024-11-20T11:33:09.968589
+good/fine (nj...), njema,h24,2024-11-20T11:31:26.069202
+peaceful, salama,h4,2024-11-20T14:55:28.241142
 I'm fine. lit. peaceful, salama,h12,2024-11-19T02:32:00
-how are you? lit. Peaceful?, salama?,h4,2024-11-19T10:56:26.551193
-welcome (sing.), karibu,h4,2024-11-19T11:03:22.706165
-welcome (pl.), karibuni,h4,2024-11-19T11:02:06.632133
-thanks (sing.), asante,h24,2024-11-20T06:58:16.540771
-thanks (pl.), asanteni,h24,2024-11-20T07:00:39.364179
-expression before entering a house, hodi,h24,2024-11-20T06:54:19.972864
-Mr/Sir, Bwana,h24,2024-11-20T07:02:59.828963
-Mrs., Bibi,h24,2024-11-20T06:57:17.969183
-Miss, Bi,h24,2024-11-20T06:56:31.509522
-and (with/by), na,h24,2024-11-20T06:56:36.886934
-My respects, Shikamoo,h24,2024-11-20T06:54:01.855102
-Welcome (reply to 'My respects'), Marahaba,h24,2024-11-20T06:53:31.096748
-work, kazi,h24,2024-11-20T07:04:01.981267
-old man, mzee,h24,2024-11-20T07:02:11.310275
-old woman, mama mzee,h24,2024-11-20T06:53:55.036091
-name, jina,h24,2024-11-20T06:55:14.160346
-journey, safari,h24,2024-11-20T06:55:21.298461
-today, leo,h24,2024-11-20T06:54:07.624769
-here, hapa,h24,2024-11-20T07:01:44.947029
-university, chuo kikuu,h24,2024-11-20T06:55:34.562446
-goodbye (sing.), kwaheri,h24,2024-11-20T07:02:33.526133
-goodbye (pl.), kwaherini,h24,2024-11-20T07:03:48.188653
-do/make (v.), fanya,,
-read/study (v.), soma,,
-what's your name?, jina lako nani?,,
-my name is ..., jina langu,,
-what's your name?, unaitwa nani?,,
-my name is ..., ninaitwa,,
-what? what kind of?, gani?,,
-drive (v.), endesha,,
-taxi, teksi,,
-to go, kwenda,,
-so/well, basi,,
-come (sing.), njoo,,
-come (pl.), njooni,,
-That's enough/That will do/No more (sing.), njoo basi,,
-That's enough/That will do/No more (pl.), njooni basi,,
+how are you? lit. Peaceful?, salama?,h24,2024-11-20T11:33:46.399605
+welcome (sing.), karibu,h24,2024-11-20T11:34:47.536826
+welcome (pl.), karibuni,h24,2024-11-20T11:34:27.991381
+thanks (sing.), asante,d6,2024-11-26T10:51:42.902952
+thanks (pl.), asanteni,d6,2024-11-26T10:57:10.820474
+expression before entering a house, hodi,d6,2024-11-26T10:51:53.023918
+Mr/Sir, Bwana,d6,2024-11-26T10:56:12.859920
+Mrs., Bibi,d6,2024-11-26T10:50:32.484738
+Miss, Bi,d6,2024-11-26T10:50:23.038058
+and (with/by), na,d6,2024-11-26T10:50:49.596529
+My respects, Shikamoo,d6,2024-11-26T10:56:08.553368
+Welcome (reply to 'My respects'), Marahaba,d6,2024-11-26T10:50:08.491608
+work, kazi,d6,2024-11-26T10:51:58.859509
+old man, mzee,d6,2024-11-26T10:52:11.362243
+old woman, mama mzee,d6,2024-11-26T10:49:11.015019
+name, jina,d6,2024-11-26T10:50:27.944337
+journey, safari,d6,2024-11-26T10:55:34.324211
+today, leo,d6,2024-11-26T10:54:53.337953
+here, hapa,d6,2024-11-26T10:55:39.053060
+university, chuo kikuu,d6,2024-11-26T10:56:37.603677
+goodbye (sing.), kwaheri,d6,2024-11-26T10:56:03.098611
+goodbye (pl.), kwaherini,d6,2024-11-26T10:55:57.963718
+do/make (v.), -fanya,h24,2024-11-21T10:50:43.734553
+read/study (v.), -soma,h24,2024-11-21T10:52:05.978485
+what's your name? (j...), jina lako nani?,h24,2024-11-21T10:54:33.210789
+my name is (j...), jina langu,h24,2024-11-21T10:56:45.418648
+what's your name? (u...), unaitwa nani?,h24,2024-11-21T10:56:31.361891
+my name is (n...), ninaitwa,h24,2024-11-21T10:57:49.153179
+what? what kind of?, gani?,h24,2024-11-21T10:49:04.938117
+drive (v.), -endesha,h24,2024-11-21T10:51:06.397590
+taxi, teksi,h24,2024-11-21T10:50:57.241820
+to go, kwenda,h24,2024-11-21T10:49:59.771734
+so/well, basi,h24,2024-11-21T10:54:16.965161
+come (sing.), njoo,h24,2024-11-21T10:50:16.023522
+come (pl.), njooni,h24,2024-11-21T10:53:30.748342
+That's enough/That will do/No more (sing.), njoo basi,h24,2024-11-21T10:54:46.344652
+That's enough/That will do/No more (pl.), njooni basi,h24,2024-11-21T10:49:21.810468
+I- (marker), ni-,,
+you- (sing. marker), u,,
+we- (marker), tu-,,
+you- (pl marker), m-,,
+I, mimi,,
+you (sing.), wewe,,
+he/she, yeye,,
+we, sisi,,
+you (pl.), nyinyi,,
+they, wao,,
+present tense marker, -na-,,
+am/is/are, ni,,
+come from/out of (v.), -toka,,
+therefore, kwa hiyo,,
+clarifies that a question is being asked, je,,
+born (v.), -zaliwa,,
+there/over there, huko,,
+but, lakini,, 
+father, baba,,
+mother (or older woman), mama,,
+West Africa, Afrika ya Magharibi,,
+presently (lit. these days), siku hizi,,
+family, familia,,
+live (v.), -ishi,,
+know (v.), -jua,,
+I dont't know, sijui,,
+yes, ndio,,
+no, hapana,,
+in/at/into, katika,,
+village, kijiji,,
+an African, Mwafrika,,
+a Swede, Mswidi,,
+a Japanese person, Mjapani,,
+a French person, Mfaransa,,
+a German, Mjerumani,,
+a Somalian, Msomali,,
+an Indian, Mhindi,,

@@ -23,10 +23,11 @@ def home():
     current_user = get_current_user()
     user_stats = {}
     for user in users:
-        total_learned, due_for_review = get_word_counts(user)
+        total_learned, due_for_review, not_learned = get_word_counts(user)
         user_stats[user] = {
             'total_learned': total_learned,
-            'due_for_review': due_for_review
+            'due_for_review': due_for_review,
+            'not_learned': not_learned
         }
     return render_template('home.html', users=users, current_user=current_user, user_stats=user_stats)
 
