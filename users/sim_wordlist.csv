@@ -1,28 +1,28 @@
 english,swahili,status,due
-thing/matter/affair, jambo,h24,2024-11-20T11:33:53.970139
-how are you? lit. there is no matter with you? (sing.), hujambo?,h24,2024-11-20T11:30:57.964389
-how are you? lit. there is no matter with you? (pl.), hamjambo?,h24,2024-11-20T11:34:13.266961
-I am fine (lit. no matter), sijambo,h24,2024-11-20T11:33:01.083424
-we are fine, hatujambo,h24,2024-11-20T11:31:44.862706
-news/information, habari,h24,2024-11-20T11:31:56.457386
-how are things? lit. News?, habari?,h24,2024-11-20T11:33:38.366407
-how are things? lit. News what sort?, habari gani?,h24,2024-11-20T11:31:16.328880
-how are you? lit. Your news? (sing.), habari yako?,h24,2024-11-20T11:33:32.356593
-how are you? lit. Your news? (pl.), habari zenu?,h24,2024-11-20T11:32:17.223160
-good/fine (nz...), nzuri,h24,2024-11-20T11:33:09.968589
-good/fine (nj...), njema,h24,2024-11-20T11:31:26.069202
-peaceful, salama,h4,2024-11-20T14:55:28.241142
+thing/matter/affair, jambo,d6,2024-11-27T06:14:57.058696
+how are you? lit. there is no matter with you? (sing.), hujambo?,d6,2024-11-27T06:16:08.989800
+how are you? lit. there is no matter with you? (pl.), hamjambo?,d6,2024-11-27T06:15:51.618276
+I am fine. lit. no matter, sijambo,d6,2024-11-27T06:13:31.661531
+we are fine. lit. no matter, hatujambo,d6,2024-11-27T06:16:52.564856
+news/information, habari,d6,2024-11-27T06:18:32.181432
+how are things? lit. News?, habari?,d6,2024-11-27T06:16:30.989648
+how are things? lit. News what sort?, habari gani?,d6,2024-11-27T06:15:58.961747
+how are you? lit. Your news? (sing.), habari yako?,d6,2024-11-27T06:14:45.381196
+how are you? lit. Your news? (pl.), habari zenu?,d6,2024-11-27T06:17:57.933676
+good/fine (nz...), nzuri,d6,2024-11-27T06:13:40.015869
+good/fine (nj...), njema,d6,2024-11-27T06:18:08.735988
+peaceful, salama,h24,2024-11-22T06:18:17.613628
 I'm fine. lit. peaceful, salama,h12,2024-11-19T02:32:00
-how are you? lit. Peaceful?, salama?,h24,2024-11-20T11:33:46.399605
-welcome (sing.), karibu,h24,2024-11-20T11:34:47.536826
-welcome (pl.), karibuni,h24,2024-11-20T11:34:27.991381
+how are you? lit. Peaceful?, salama?,d6,2024-11-27T06:18:13.440435
+welcome (sing.), karibu,d6,2024-11-27T06:15:39.492817
+welcome (pl.), karibuni,d6,2024-11-27T06:16:41.518607
 thanks (sing.), asante,d6,2024-11-26T10:51:42.902952
 thanks (pl.), asanteni,d6,2024-11-26T10:57:10.820474
 expression before entering a house, hodi,d6,2024-11-26T10:51:53.023918
 Mr/Sir, Bwana,d6,2024-11-26T10:56:12.859920
 Mrs., Bibi,d6,2024-11-26T10:50:32.484738
 Miss, Bi,d6,2024-11-26T10:50:23.038058
-and (with/by), na,d6,2024-11-26T10:50:49.596529
+and (with/by), na,h4,2024-11-21T10:34:00
 My respects, Shikamoo,d6,2024-11-26T10:56:08.553368
 Welcome (reply to 'My respects'), Marahaba,d6,2024-11-26T10:50:08.491608
 work, kazi,d6,2024-11-26T10:51:58.859509
@@ -50,27 +50,25 @@ come (sing.), njoo,h24,2024-11-21T10:50:16.023522
 come (pl.), njooni,h24,2024-11-21T10:53:30.748342
 That's enough/That will do/No more (sing.), njoo basi,h24,2024-11-21T10:54:46.344652
 That's enough/That will do/No more (pl.), njooni basi,h24,2024-11-21T10:49:21.810468
-I- (marker), ni-,,
-you- (sing. marker), u,,
-we- (marker), tu-,,
-you- (pl marker), m-,,
-I, mimi,,
-you (sing.), wewe,,
-he/she, yeye,,
-we, sisi,,
-you (pl.), nyinyi,,
-they, wao,,
-present tense marker, -na-,,
-am/is/are, ni,,
-come from/out of (v.), -toka,,
-therefore, kwa hiyo,,
-clarifies that a question is being asked, je,,
-born (v.), -zaliwa,,
-there/over there, huko,,
-but, lakini,, 
-father, baba,,
-mother (or older woman), mama,,
-West Africa, Afrika ya Magharibi,,
+I- (marker), ni-,h4,2024-11-21T10:34:00
+you- (sing. marker), u,h4,2024-11-21T10:21:00
+we- (marker), tu-,h4,2024-11-21T10:21:00
+you- (pl marker), m-,h4,2024-11-21T10:20:00
+I, mimi,h4,2024-11-21T10:21:00
+you (sing.), wewe,h4,2024-11-21T10:24:00
+he/she, yeye,h4,2024-11-21T10:24:00
+we, sisi,h4,2024-11-21T10:24:00
+you (pl.), nyinyi,h4,2024-11-21T10:23:00
+they, wao,h4,2024-11-21T10:24:00
+come from/out of (v.), -toka,h4,2024-11-21T10:26:00
+therefore, kwa hiyo,h4,2024-11-21T10:27:00
+clarifies that a question is being asked, je,h4,2024-11-21T10:27:00
+born (v.), -zaliwa,h4,2024-11-21T10:30:00
+there/over there, huko,h4,2024-11-21T10:30:00
+but, lakini,h4,2024-11-21T10:30:00
+father, baba,h4,2024-11-21T10:34:00
+mother (or older woman), mama,h4,2024-11-21T10:34:00
+West Africa, Afrika ya Magharibi,h4,2024-11-21T10:34:00
 presently (lit. these days), siku hizi,,
 family, familia,,
 live (v.), -ishi,,
